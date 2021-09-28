@@ -26,6 +26,7 @@ const MovieCard = ({
 }) => {
   const [liked, setLiked] = useState(false);
   const [voteCountValue, setVoteCountValue] = useState(voteCount);
+  const [isPosterLoaded, setPosterLoaded] = useState(true);
 
   return (
     <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
@@ -33,11 +34,12 @@ const MovieCard = ({
         style={{ ...styles.container, width: 230 * size, height: 340 * size }}
         imageStyle={{ borderRadius: 12 }}
         source={{ uri: getPoster(poster) }}
+        onLoadEnd={() => setPosterLoaded(false)}
       >
         <View style={{ ...styles.imdbContainer, paddingVertical: 3 * size }}>
           <Image
             source={IMAGES.IMDB}
-            resizeMode="cover"
+            resizeMode='cover'
             style={{ ...styles.imdbImage, height: 20 * size, width: 50 * size }}
           />
           <Text
@@ -81,7 +83,7 @@ const MovieCard = ({
           </Text>
           <View style={styles.rowAndCenter}>
             <Ionicons
-              name="heart"
+              name='heart'
               size={17 * size}
               color={COLORS.HEART}
               style={{ marginRight: 5 }}

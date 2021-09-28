@@ -11,9 +11,12 @@ import {
   Linking,
   FlatList,
   Share,
+  Modal,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import COLORS from "../constants/Colors";
 import FONTS from "../constants/Fonts";
+import { WebView } from "react-native-webview";
 import {
   getMovieById,
   getPoster,
@@ -23,6 +26,7 @@ import {
 import ItemSeparator from "../components/ItemSeparator";
 import CastCard from "../components/CastCard";
 import MovieCard from "../components/MovieCard";
+import Comment from "../components/Comment";
 import { LinearGradient } from "expo-linear-gradient";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { APPEND_TO_RESPONSE as AR } from "../constants/Urls";
@@ -32,21 +36,27 @@ const { height, width } = Dimensions.get("window");
 const setHeight = (h) => (height / 100) * h;
 const setWidth = (w) => (width / 100) * w;
 
-const MovieScreen = ({ route, navigation }) => {
+const MovieScreen = ({ route }) => {
   const { movieId } = route.params;
   const [movie, setMovie] = useState({});
   const [isCastSelected, setIsCastSelected] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     getMovieById(
       movieId,
-      `${AR.VIDEOS},${AR.CREDITS},${AR.RECOMMENDATIONS},${AR.SIMILAR}`
-    ).then((response) => setMovie(response?.data));
+      `${AR.VIDEOS},${AR.CREDITS},${AR.RECOMMENDATIONS},${AR.SIMILAR},${AR.REVIEWS}`
+    ).then((response) => {
+      setMovie(response?.data);
+      // console.log(response?.data.credits?.cast);
+      // console.warn("Videos ===>", response?.data.videos.results);
+      console.log("Data===>", response?.data);
+    });
   }, []);
 
   return (
     <ScrollView style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style='light' />
       <LinearGradient
         colors={["rgba(0, 0, 0, 0.5)", "rgba(217, 217, 217, 0)"]}
         start={[0, 0.3]}
@@ -55,7 +65,7 @@ const MovieScreen = ({ route, navigation }) => {
       <View style={styles.moviePosterImageContainer}>
         <Image
           style={styles.moviePosterImage}
-          resizeMode="cover"
+          resizeMode='cover'
           source={{ uri: getPoster(movie?.backdrop_path) }}
         />
       </View>
@@ -64,7 +74,7 @@ const MovieScreen = ({ route, navigation }) => {
           activeOpacity={0.5}
           onPress={() => navigation.goBack()}
         >
-          <Feather name="chevron-left" size={35} color={COLORS.WHITE} />
+          <Feather name='chevron-left' size={35} color={COLORS.WHITE} />
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
@@ -79,7 +89,7 @@ const MovieScreen = ({ route, navigation }) => {
         style={styles.playButton}
         onPress={() => Linking.openURL(getVideo(movie.videos.results[0].key))}
       >
-        <Ionicons name="play-circle-outline" size={70} color={COLORS.WHITE} />
+        <Ionicons name='play-circle-outline' size={70} color={COLORS.WHITE} />
       </TouchableOpacity>
       <ItemSeparator height={setHeight(37)} />
       <View style={styles.movieTitleContainer}>
@@ -87,7 +97,7 @@ const MovieScreen = ({ route, navigation }) => {
           {movie?.original_title}
         </Text>
         <View style={styles.row}>
-          <Ionicons name="heart" size={22} color={COLORS.HEART} />
+          <Ionicons name='heart' size={22} color={COLORS.HEART} />
           <Text style={styles.ratingText}>{movie?.vote_average}</Text>
         </View>
       </View>
@@ -103,7 +113,7 @@ const MovieScreen = ({ route, navigation }) => {
         <Text style={styles.overviewText}>{movie?.overview}</Text>
       </View>
       <View>
-        <Text style={styles.castTitle}>Cast</Text>
+        {/* <Text style={styles.castTitle}>Cast</Text> */}
         <View style={styles.castSubMenuContainer}>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -113,6 +123,7 @@ const MovieScreen = ({ route, navigation }) => {
               style={{
                 ...styles.castSubMenuText,
                 color: isCastSelected ? COLORS.BLACK : COLORS.LIGHT_GRAY,
+                // textDecorationLine: "underline",
               }}
             >
               Cast
@@ -126,6 +137,7 @@ const MovieScreen = ({ route, navigation }) => {
               style={{
                 ...styles.castSubMenuText,
                 color: isCastSelected ? COLORS.LIGHT_GRAY : COLORS.BLACK,
+                // textDecorationLine: "underline",
               }}
             >
               Crew
@@ -150,6 +162,17 @@ const MovieScreen = ({ route, navigation }) => {
           )}
         />
       </View>
+      {movie?.reviews?.results.length > 0 && (
+        <>
+          <Text style={styles.extraListTitle}>Reviews</Text>
+          <View style={{ paddingHorizontal: 20 }}>
+            {movie?.reviews?.results.map((item) => (
+              <Comment data={item} />
+            ))}
+          </View>
+        </>
+      )}
+
       <Text style={styles.extraListTitle}>Recommended Movies</Text>
       <FlatList
         data={movie?.recommendations?.results}
@@ -167,7 +190,7 @@ const MovieScreen = ({ route, navigation }) => {
             voteCount={item.vote_count}
             poster={item.poster_path}
             size={0.6}
-            onPress={() => navigation.navigate("movie", { movieId: item.id })}
+            onPress={() => navigation.push("movie", { movieId: item.id })}
           />
         )}
       />
@@ -188,7 +211,7 @@ const MovieScreen = ({ route, navigation }) => {
             voteCount={item.vote_count}
             poster={item.poster_path}
             size={0.6}
-            onPress={() => navigation.navigate("movie", { movieId: item.id })}
+            onPress={() => navigation.push("movie", { movieId: item.id })}
           />
         )}
       />

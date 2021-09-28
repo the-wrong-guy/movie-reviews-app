@@ -1,0 +1,62 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\BHARGAV\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-skeleton-placeholder
+
+PATH: 
+  C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Python27\;C:\Python27\Scripts;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Brackets\command;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\BHARGAV\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\BHARGAV\AppData\Roaming\npm;C:\Users\BHARGAV\AppData\Local\Microsoft\WindowsApps;C:\adb;C:\Program Files\nodejs\;C:\wamp64\bin\php\php7.3.21;C:\ProgramData\ComposerSetup\bin;;C:\wamp64\bin\php\php7.3.21;C:\Users\BHARGAV\AppData\Roaming\Composer\vendor\bin;C:\Users\BHARGAV\AppData\Local\Programs\Microsoft VS Code\bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.15.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:67:26)
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "@react-native-community/masked-view": "0.1.10",
+      "@react-navigation/native": "^5.9.4",
+      "@react-navigation/stack": "^5.14.5",
+      "axios": "^0.21.1",
+      "expo": "~41.0.1",
+      "expo-app-loading": "^1.0.3",
+      "expo-font": "^9.1.0",
+      "expo-status-bar": "~1.0.4",
+      "react": "16.13.1",
+      "react-dom": "16.13.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
+      "react-native-gesture-handler": "~1.10.2",
+      "react-native-reanimated": "~2.1.0",
+      "react-native-safe-area-context": "3.2.0",
+      "react-native-screens": "~3.0.0",
+      "react-native-web": "~0.13.12",
+      "expo-linear-gradient": "~9.1.0"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.9.0"
+    },
+    "private": true,
+    "projectConfig": {
+      "apiKey": "<put the api key from tmdb here>"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

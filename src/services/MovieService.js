@@ -1,4 +1,5 @@
-const axios = require("axios").default;
+import axios from "axios";
+// const axios = require("axios")
 import {
   TMDB_BASE_URL,
   TMDB_API_KEY,
@@ -14,6 +15,11 @@ const TMDB_HTTP_REQUEST = axios.create({
     api_key: TMDB_API_KEY,
   },
 });
+
+const createRequestToken = () => TMDB_HTTP_REQUEST.get(ENDPOINTS.REQUEST_TOKEN);
+
+const login = (details) =>
+  TMDB_HTTP_REQUEST.post(ENDPOINTS.REQUEST_TOKEN, details);
 
 const getNowPlayingMovies = () =>
   TMDB_HTTP_REQUEST.get(ENDPOINTS.NOW_PLAYING_MOVIES);
@@ -36,6 +42,15 @@ const getVideo = (key) => `${YOUTUBE_BASE_URL}?v=${key}`;
 const getLanguage = (language_iso) =>
   LANGUAGES.find((language) => language.iso_639_1 === language_iso);
 
+const getParticularGenre = (genre) => {
+  return axios.get(
+    `https://api.themoviedb.org/3/discover/movie?api_key=${TMDB_API_KEY}&with_genres=${genre}`
+  );
+};
+
+const searchMovies = (search) =>
+  TMDB_HTTP_REQUEST.get(`${ENDPOINTS.SEARCH}?query=${search}`);
+
 export {
   getNowPlayingMovies,
   getUpcomingMovies,
@@ -44,4 +59,8 @@ export {
   getPoster,
   getLanguage,
   getVideo,
+  getParticularGenre,
+  searchMovies,
+  createRequestToken,
+  login,
 };

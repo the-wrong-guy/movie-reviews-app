@@ -9,14 +9,24 @@ const CastCard = ({ originalName, image, characterName }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={image ? { uri: getPoster(image) } : IMAGES.NO_IMAGE}
+        source={{
+          uri:
+            getPoster(image) ??
+            "https://img.icons8.com/ios-glyphs/30/000000/person-male.png",
+        }}
         resizeMode={image ? "cover" : "contain"}
         style={styles.image}
+        // defaultSource={{
+        //   uri: "https://img.icons8.com/ios-glyphs/30/000000/person-male.png",
+        // }}
+        // loadingIndicatorSource={{
+        //   uri: "https://s2.svgbox.net/loaders.svg?ic=slow-spinner",
+        // }}
       />
       <Text style={styles.originalName} numberOfLines={2}>
         {originalName}
       </Text>
-      <Text style={styles.characterName} numberOfLines={2}>
+      <Text style={styles.characterName} numberOfLines={3}>
         {characterName}
       </Text>
     </View>

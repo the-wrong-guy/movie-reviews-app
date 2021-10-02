@@ -6,11 +6,11 @@ export default function SplashScreen() {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Splash Screen</Text>
-      <LottieView
+      {/* <LottieView
         autoPlay
         loop
         source={require("../Lottie/splash-animation.json")}
-      />
+      /> */}
     </View>
   );
 }

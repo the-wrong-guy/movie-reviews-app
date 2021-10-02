@@ -10,6 +10,7 @@ import AppLoading from "expo-app-loading";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "./src/components/DrawerContent";
 import SplashScreen from "./src/screens/SplashScreen";
+import LoginScreen from "./src/screens/LoginScreen";
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -40,11 +41,17 @@ export default () => {
     ExtraLight: require("./assets/fonts/NunitoSans-ExtraLight.ttf"),
     Light: require("./assets/fonts/NunitoSans-Light.ttf"),
     SemiBold: require("./assets/fonts/NunitoSans-SemiBold.ttf"),
+    GloriaHallelujah: require("./assets/fonts/GloriaHallelujah-Regular.ttf"),
   });
 
   return fontLoaded ? (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name='login'
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name='home'
           component={HomeScreen}

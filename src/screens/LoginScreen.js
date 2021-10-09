@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,13 +12,14 @@ import { MaterialIcons as Icon } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { auth } from "../../firebase";
-import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
 
 const { width, height } = Dimensions.get("window");
 
 // 213812759610-829072g84ec4se432rnucgl9hn250t3o.apps.googleusercontent.com
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation, route }) {
   const [details, setDetails] = useState({
     email: "",
     password: "",
@@ -32,9 +33,19 @@ export default function LoginScreen() {
   const [loginError, setLoginError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [forwardView, setForwardView] = useState(false);
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+  useEffect(() => {
+    const unsub = async () => {
+      const user = JSON.parse(await AsyncStorage.getItem("user"));
+      if (user) {
+        navigation.navigate("home");
+      }
+    };
+    unsub();
+  }, []);
 
   const resetForm = () => {
     setDetails({ email: "", password: "", confirmPassword: "" });
@@ -86,9 +97,10 @@ export default function LoginScreen() {
       setLoading(true);
       await auth
         .createUserWithEmailAndPassword(details.email, details.password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           // Signed in
           const user = userCredential.user;
+          await AsyncStorage.setItem("user", JSON.stringify(user));
           console.log("Loged In user", user);
           navigation.navigate("home");
           resetForm();
@@ -97,6 +109,10 @@ export default function LoginScreen() {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log("eroor login ===>", errorMessage);
+          Toast.show({
+            type: "error",
+            text1: errorMessage,
+          });
           setLoginError(errorMessage);
           setLoading(false);
         });
@@ -128,9 +144,13 @@ export default function LoginScreen() {
       setLoading(true);
       await auth
         .signInWithEmailAndPassword(details.email, details.password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           // Signed in
           const user = userCredential.user;
+          if (user) {
+            await AsyncStorage.setItem("user", JSON.stringify(user));
+          }
+
           console.log("Loged In user", user);
           navigation.navigate("home");
           resetForm();
@@ -139,6 +159,11 @@ export default function LoginScreen() {
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log("eroor login ===>", errorMessage);
+          Toast.show({
+            type: "error",
+            text1: errorCode,
+            text2: errorMessage,
+          });
           setLoginError(errorMessage);
           setLoading(false);
         });

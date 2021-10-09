@@ -1,5 +1,11 @@
-import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
+import {
+  NavigationContainer,
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./src/screens/HomeScreen";
 import MovieScreen from "./src/screens/MovieScreen";
@@ -11,28 +17,67 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import CustomDrawerContent from "./src/components/DrawerContent";
 import SplashScreen from "./src/screens/SplashScreen";
 import LoginScreen from "./src/screens/LoginScreen";
+import Toast from "react-native-toast-message";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialIcons as Icon } from "@expo/vector-icons";
+import Colors from "./src/constants/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BlurView } from "expo-blur";
+import ProfileScreen from "./src/screens/ProfileScreen";
 
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function HomeStackScreen() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveBackgroundColor: "#A7E3D7",
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: {
+          borderRadius: 15,
+          bottom: 8,
+          marginHorizontal: 7,
+          backgroundColor: "#fff",
+          position: "absolute",
+        },
+        tabBarItemStyle: { margin: 5, borderRadius: 10 },
+      }}
+    >
+      <Tab.Screen
         name='home'
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{
+          tabBarIcon: () => <Icon name='home' size={30} />,
+          tabBarShowLabel: false,
+          headerShown: false,
+        }}
       />
-      <Stack.Screen
-        name='movie'
-        component={MovieScreen}
-        options={{ headerShown: false }}
+      <Tab.Screen
+        name='fav'
+        component={FavoriteScreen}
+        options={{
+          tabBarIcon: () => <Icon name='favorite' size={30} />,
+          tabBarShowLabel: false,
+          headerShown: false,
+        }}
       />
-    </Stack.Navigator>
+      <Tab.Screen
+        name='search'
+        component={SearchScreen}
+        options={{
+          tabBarIcon: () => <Icon name='search' size={30} />,
+          tabBarShowLabel: false,
+          headerShown: false,
+        }}
+      />
+    </Tab.Navigator>
   );
 }
 
 export default () => {
+  // const navigation = useNavigation();
   const [fontLoaded] = useFonts({
     Regular: require("./assets/fonts/NunitoSans-Regular.ttf"),
     Bold: require("./assets/fonts/NunitoSans-Bold.ttf"),
@@ -54,7 +99,7 @@ export default () => {
         />
         <Stack.Screen
           name='home'
-          component={HomeScreen}
+          component={HomeStackScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -63,16 +108,12 @@ export default () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name='fav'
-          component={FavoriteScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name='search'
-          component={SearchScreen}
+          name='profile'
+          component={ProfileScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </NavigationContainer>
   ) : (
     <SplashScreen />

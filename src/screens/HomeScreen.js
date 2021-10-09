@@ -17,6 +17,9 @@ import GenreCard from "../components/GenreCard";
 import MovieCard from "../components/MovieCard";
 import ItemSeparator from "../components/ItemSeparator";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { auth } from "../../firebase";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   getNowPlayingMovies,
@@ -27,6 +30,7 @@ import {
 
 const HomeScreen = (props) => {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
   const [activeGenre, setActiveGenre] = useState({
     id: 28,
     name: "Action",
@@ -34,7 +38,15 @@ const HomeScreen = (props) => {
   const [nowPlayingMovies, setNowPlayingMovies] = useState({});
   const [upcomingMovies, setUpcomingMovies] = useState({});
   const [genres, setGenres] = useState([]);
+  const bottomTabHeight = useBottomTabBarHeight();
 
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
+  }, []);
   useEffect(() => {
     getNowPlayingMovies().then((movieResponse) => {
       setNowPlayingMovies(movieResponse.data);
@@ -79,16 +91,25 @@ const HomeScreen = (props) => {
         >
           <Pressable
             onPress={() => {
-              navigation.navigate("fav");
+              navigation.navigate("profile");
             }}
+            android_ripple={{ color: COLORS.GRAY, borderless: true }}
           >
             <Image
-              style={{ width: 25, height: 28 }}
+              style={{
+                width: 35,
+                height: 35,
+                backgroundColor: "#000",
+                borderRadius: 25,
+              }}
               source={{
-                uri: "https://img.icons8.com/material-rounded/96/000000/menu--v1.png",
+                uri:
+                  user?.photoURL ??
+                  "https://www.gravatar.com/avatar/94d093eda664addd6e450d7e9881bcad?s=32&d=identicon&r=PG",
               }}
             />
           </Pressable>
+          <Text style={styles.appName}>Hingtam</Text>
           <Pressable
             onPress={() => navigation.navigate("search")}
             android_ripple={{ color: COLORS.GRAY, borderless: true }}
@@ -96,10 +117,10 @@ const HomeScreen = (props) => {
             <MaterialIcons name='search' size={25} />
           </Pressable>
         </View>
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           <Text style={styles.headerTitle}>Now Showing</Text>
           <Text style={styles.headerSubTitle}>VIEW ALL</Text>
-        </View>
+        </View> */}
         <View style={styles.genreListContainer}>
           <FlatList
             data={genres}
@@ -146,7 +167,7 @@ const HomeScreen = (props) => {
           <Text style={styles.headerTitle}>Coming Soon</Text>
           <Text style={styles.headerSubTitle}>VIEW ALL</Text>
         </View>
-        <View>
+        <View style={{ paddingBottom: bottomTabHeight }}>
           <FlatList
             data={upcomingMovies.results}
             horizontal
@@ -198,6 +219,13 @@ const styles = StyleSheet.create({
   },
   genreListContainer: {
     paddingVertical: 10,
+  },
+  appName: {
+    color: "#5642F5",
+    fontSize: 25,
+    fontFamily: "GloriaHallelujah",
+    // textDecorationLine: "underline",
+    fontWeight: "900",
   },
 });
 

@@ -1,10 +1,5 @@
-# React Native - The Movie App
-
-The movie app is a movie browsing app that builds completely on [**React Native**](https://reactnative.dev/) and [**Expo**](https://expo.io).
-
-## Screenshot
-
-![screenshots of the movie app](/screenshot/movie_ui_design.png)
+# Movie App
+It's app to show latest shoes along with their rating and reviews, also users can book a movie
 
 ## Dependencies
 
@@ -32,18 +27,7 @@ cd the_movie_app
 npm install
 ```
 
-### 3. Configuration
-
-Add TMDB API-KEY inside package.json / projectConfig.apiKey
-
-```sh
-# add tmdb api-key here
-"projectConfig": {
-    "apiKey": "<put the api key from tmdb here>"
-  }
-```
-
-### 4. Start the app
+### 3. Start the app
 
 ```sh
 # using expo-cli

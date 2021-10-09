@@ -45,6 +45,9 @@ import {
   BottomSheetFlatList,
 } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Toast from "react-native-toast-message";
+import db
+
 // import moment from "moment";
 
 const { height, width } = Dimensions.get("window");
@@ -110,6 +113,16 @@ const MovieScreen = ({ route }) => {
     time: "",
   });
 
+
+  const handleBookMovie = ()=>{
+    if(bookingDetails.day === '' || bookingDetails.time === ''){
+      Toast.show({
+        type: "success",
+        text1: "Please select both Time and Date",
+      })}else{
+      };
+    }
+  }
   const movieDayItem = ({ item }) => {
     return (
       <Pressable
@@ -297,6 +310,7 @@ const MovieScreen = ({ route }) => {
               containerStyle={{ borderRadius: 25 }}
               titleStyle={{ color: "#000" }}
               title='Book Now'
+              onPress={handleBookMovie}
             />
           </View>
         </View>

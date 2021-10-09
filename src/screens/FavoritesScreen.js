@@ -39,7 +39,6 @@ export default function FavoritesScreen() {
   );
 }
 
-
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: COLORS.BASIC_BACKGROUND,
@@ -51,8 +50,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  headerTitle: {
-    fontSize: 28,
-    fontFamily: FONTS.REGULAR,
-  },
+  headerTitle: { fontSize: 20, fontFamily: "Bold" },
 });
